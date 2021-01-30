@@ -22,6 +22,7 @@ import java.util.ArrayList;
 //@Route("stream")
 //@Push
 public class StreamingDataExampleView extends VerticalLayout {   // extends ExampleHolderView
+    boolean clearChartData = true;
     static private boolean isThreadRunning = false;
     private double nextValueDouble = 0;
 //
@@ -76,9 +77,17 @@ public class StreamingDataExampleView extends VerticalLayout {   // extends Exam
                     e.printStackTrace();
                 }
                 if(isThreadRunning){
+                    //clear chart before next run
+                    if(clearChartData){
+                        arrayList.clear();
+                        clearChartData = false;
+                    }
                     arrayList.add(nextValueDouble);
                     getUI().ifPresent(ui -> ui.access(() -> chart.updateSeries(new Series<>(arrayList.toArray(new Double[]{})))));
+                } else {
+                    clearChartData = true;
                 }
+                //save actual status to previous
             }
         });
         thread.start();
@@ -106,4 +115,6 @@ public class StreamingDataExampleView extends VerticalLayout {   // extends Exam
     public void setRunThread(boolean runThread) {
         isThreadRunning = runThread;
     }
+
+    public void clearChartData(){this.clearChartData = true;}
 }
