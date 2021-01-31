@@ -22,8 +22,6 @@ public class Calculation {
         this.tPrev = t;
         this.xAlpha = xAlpha;
         this.yAlpha = yAlpha;
-
-
     }
 
 
@@ -36,6 +34,7 @@ public class Calculation {
             setxPrev(xPrev);
             setyPrev(yPrev);
             setZ(z);
+            psi=0;
 
         } else {
             double delta = tActual - tPrev;//dla 1 obliczenia t0 = stałe 20 potem to wynik z poprzedniego kroku
@@ -48,13 +47,13 @@ public class Calculation {
             settPrev(tActual);//set previous as actual for next step.
             Lactual = Lprev + psi;//w pierwszym kroku l0 ma byc rowne Lstart, potem to kolejne wyniki
         }
-
     }
 
     public void settActual(double tActual) {
         this.tActual = tActual;
         calculateChanges();
     }
+
     public double gettActual() {
         return tActual;
     }

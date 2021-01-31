@@ -1,7 +1,7 @@
 package com.study.automatic.rod.backend.ui.sampling;
 
 
-import com.study.automatic.rod.backend.calculation.Calculation;
+import com.study.automatic.rod.backend.calculation.CalculationKrzychu;
 import com.study.automatic.rod.backend.entity.Record;
 import com.study.automatic.rod.backend.entity.Sample;
 import com.study.automatic.rod.backend.service.RecordService;
@@ -13,18 +13,12 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.util.ArrayList;
-
-
-
-
-
 
 @Route(value = "test", layout = MainLayout.class)
 //@CssImport("./styles/workstation-styles.css")
@@ -36,11 +30,18 @@ public class SamplingView extends VerticalLayout {
 
     SampleService sampleService;
     RecordService recordService;
+    private int sampleRecordCounter = 0;
 
     private Sample sample;
-    private final StreamingDataExampleView chart;
-    private final StreamingDataExampleView chart2;
-    private final StreamingDataExampleView chart3;
+    private int sliderValueChanged = 0; //pozwala na update wykresów w kolejnej iteracji po zmianie wartości suwaka.
+    private ChartLive chartX;
+    private ChartLive chartXDelta;       ;
+    private ChartLive chartY;
+    private ChartLive chartYDelta;
+    private ChartLive chartTotal;
+    private ChartLive chartTotalDelta;
+    private ChartLive chartTemp;
+    private ChartLive chartTempDelta;
 
     private PaperSlider paperSlider;
     private final Label sliderValueLabel;
@@ -48,62 +49,68 @@ public class SamplingView extends VerticalLayout {
     private Button startButton;
     private Button stopButton;
     boolean czyPierwszypoguziku=true;
-    private final Calculation calculation;
+    //private final Calculation calculation;
+    private CalculationKrzychu calculation;
 //    private ArrayList<Calculation> wyniki;
 
+    double x=200, y=200, z=10, temp=20, xAlpha=0.00017, yAlpha =0.00012;
+
     public SamplingView(SampleService sampleService, RecordService recordService){
+        this.paperSlider = new PaperSlider();
+        paperSlider.setValue((int)temp);
+        sliderValueLabel = new Label(Integer.toString((int)temp));
 
-        double x=200,y=200,z=10,t0=20;// potem brane z inputow albo cos Z i T najlepiej
-        double xAlpha=0.00017,yAlpha=0.00012;
-
-
-
-        this.calculation = new Calculation(x,y,z,t0,xAlpha,yAlpha);// po kolei: to tylko dane startowe z inputow: X poczatkowa dlugosc x w milimetrach
-        //y - pocz dl. mat. y w milimetrach, Z odleglosc ktora ma byc zachowana miedzy nimi w milimetrach, t - poczatkowa temperatura
-        //xAlpha i yAlpha stale wspolczynniki materialow.
-        chart = new StreamingDataExampleView();
-        chart2 = new StreamingDataExampleView();
-        chart3 = new StreamingDataExampleView();
-        chart.setNextValueDouble(t0);   //ustawia poczatkowa wartosc
-        /*addAttachListener(event -> {
-            this.ui = event.getUI();
-        });*/
         ui = UI.getCurrent();
 
-        //Ustaw wartości początkowe
-        calculation.settPrev(t0);
-        chart.setNextValueDouble(calculation.getxPrev());
-        chart2.setNextValueDouble(calculation.getPsi());
-        chart3.setNextValueDouble(calculation.getyPrev());
-
-        sliderValueLabel = new Label("elo");
         this.sampleService = sampleService;
         this.recordService = recordService;
         addClassName("test-view");
         setSizeFull();
-        add(createSimulationButtonLayout(), createSlider(), sliderValueLabel, createChars());
+        add(createSimulationButtonLayout(), createSlider(), sliderValueLabel, createChartsLayout());
 
     }
 
-    private HorizontalLayout createChars(){
-        HorizontalLayout hl = new HorizontalLayout();
-        hl.setSizeFull();
-        hl.add(chart);
-        hl.add(chart2);
-        hl.add(chart3);
-        return hl;
+    private VerticalLayout createChartsLayout() {
+        //initialize charts
+        chartX = new ChartLive("x");
+        chartTotal = new ChartLive("totalLength");
+        chartY = new ChartLive("y");
+
+        chartXDelta = new ChartLive("xDelta");
+        chartTotalDelta = new ChartLive("totalDelta");
+        chartYDelta = new ChartLive("yDelta");
+
+        chartTemp = new ChartLive("temp");
+        chartTempDelta = new ChartLive("tempDelta");
+
+        //initialize layout array
+        HorizontalLayout[] chartsLevels = new HorizontalLayout[3];
+        for (int i=0; i<chartsLevels.length; i++) {
+            chartsLevels[i] = new HorizontalLayout();
+        }
+
+        chartsLevels[0].add(chartX, chartTotal, chartY);
+        chartsLevels[1].add(chartXDelta, chartTotalDelta, chartYDelta);
+        chartsLevels[2].add(chartTemp, chartTempDelta);
+
+        VerticalLayout chartsLayout = new VerticalLayout();
+        for (HorizontalLayout level: chartsLevels){
+            chartsLayout.add(level);
+        }//for
+
+        return chartsLayout;
     }
 
     private void addNewRecord(){
         if(sample != null){
             Record newRecord = new Record (sample, paperSlider.getValue());
             recordService.save(newRecord);
-            System.out.println("Sample " + sample.getId() + " record " + newRecord.getId() + " value " + paperSlider.getValue());
+            System.out.println("Sample " + sample.getId() + " record " + newRecord.getId() + " sampleCounter " + sampleRecordCounter + " value " + paperSlider.getValue());
 
             //notification
-            this.ui.access(() -> {
-                Notification.show("Sample " + sample.getId() + " record " + newRecord.getId() + " value " + paperSlider.getValue());
-            });
+            //this.ui.access(() -> {
+            //    Notification.show("Sample " + sample.getId() + " record " + newRecord.getId() + " sampleCounter " + sampleRecordCounter + " value " + paperSlider.getValue());
+            //});
             //refreshPlot();
         }//if
     }
@@ -123,20 +130,16 @@ public class SamplingView extends VerticalLayout {
 
         startButton.addClickListener(event -> {
             startSampling();
-            chart.setRunThread(true);
+
         });//start event
         stopButton.addClickListener(event -> {
             stopSampling();
-            chart.setRunThread(false);
         });//stop event
 
         return hl;
     }
 
     private PaperSlider createSlider(){
-
-
-        this.paperSlider = new PaperSlider();
         paperSlider.setMin(-100);
         paperSlider.setMax(200);
         paperSlider.setPin(true);
@@ -149,17 +152,23 @@ public class SamplingView extends VerticalLayout {
         paperSlider.addValueChangeListener(e -> {
             sliderValueLabel.setText(e.getValue().toString());
 
-
-
-
-            calculation.settActual(e.getValue());
-            chart.setNextValueDouble(calculation.getxPrev());//Niech nazwa cie nie myli to aktualna wielkosc tylko pod koniec change value ustawia pod tą zmienną wielkosc aktualną
-            chart2.setNextValueDouble(calculation.getPsi());
-            chart3.setNextValueDouble(calculation.getyPrev());
-            //chart3.setNextValueDouble(calculation.getPsi());
-
-
+            sliderValueChanged = 3;//mogłoby być 2 odświeżenia, gdyby nie calculations
         });//e
+    }
+
+    private void updateCharts(){
+        calculation.setTemp(paperSlider.getValue());
+        calculation.recalculateAll();
+        //calculation.settActual(paperSlider.getValue());
+
+        chartX.setNextValueDouble(calculation.getX());
+        chartXDelta.setNextValueDouble(calculation.getxDelta());
+        chartY.setNextValueDouble(calculation.getY());
+        chartYDelta.setNextValueDouble(calculation.getyDelta());
+        chartTotal.setNextValueDouble(calculation.getTotal());
+        chartTotalDelta.setNextValueDouble(calculation.getTotalDelta());
+        chartTemp.setNextValueDouble(calculation.getTemp());
+        chartTempDelta.setNextValueDouble(calculation.getTempDelta());
     }
 
     private void setStartEnable(){
@@ -176,15 +185,34 @@ public class SamplingView extends VerticalLayout {
         stopButton.setEnabled(true);
     }
 
+    private void setChartTreadRunning(boolean isRunning){
+        chartX.setRunThread(isRunning);
+        chartXDelta.setRunThread(isRunning);
+        chartY.setRunThread(isRunning);
+        chartYDelta.setRunThread(isRunning);
+        chartTotal.setRunThread(isRunning);
+        chartTotalDelta.setRunThread(isRunning);
+        chartTemp.setRunThread(isRunning);
+        chartTempDelta.setRunThread(isRunning);
+    }
+
     private void startSampling() {
         sample = new Sample();
         isThreadRunning = true;
+
+        setChartTreadRunning(isThreadRunning);
+
         sampleService.save(sample);
         setStopEnable();
+        this.calculation = new CalculationKrzychu(x,y,z,xAlpha,yAlpha,temp);
+        updateCharts();
     }
 
     private void stopSampling() {
         isThreadRunning = false;
+
+        setChartTreadRunning(isThreadRunning);
+
         setStartEnable();
     }
 
@@ -201,10 +229,17 @@ public class SamplingView extends VerticalLayout {
                     e.printStackTrace();
                 }
                 if(isThreadRunning){
+                    sampleRecordCounter++;
                     addNewRecord();
+                    if(sliderValueChanged > 0){
+                        updateCharts();
+                        sliderValueChanged--;
+                    }//if
+                } else {
+                    sampleRecordCounter = 0;
                 }
-            }
-        });
+            }//while
+        });//thread
         thread.start();
     }
 

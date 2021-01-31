@@ -2,16 +2,14 @@ package com.study.automatic.rod.backend.ui.sampling;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.builder.DataLabelsBuilder;
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder;
-import com.github.appreciated.apexcharts.config.builder.YAxisBuilder;
+import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.animations.builder.DynamicAnimationBuilder;
 import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder;
 import com.github.appreciated.apexcharts.config.chart.builder.ZoomBuilder;
+import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -21,10 +19,10 @@ import java.util.ArrayList;
 //
 //@Route("stream")
 //@Push
-public class StreamingDataExampleView extends VerticalLayout {   // extends ExampleHolderView
+public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
     boolean clearChartData = true;
     static private boolean isThreadRunning = false;
-    private double nextValueDouble = 0;
+    private double nextValueDouble = -200;
 //
     /*private double oYmin = 0;
     private double oYmax = 100;
@@ -33,7 +31,7 @@ public class StreamingDataExampleView extends VerticalLayout {   // extends Exam
     private final ApexCharts chart;
     private Thread thread;
 
-    public StreamingDataExampleView() {
+    public ChartLive(String title) {
         setSizeFull();
 
         chart = ApexChartsBuilder.get().withChart(ChartBuilder.get()
@@ -58,6 +56,10 @@ public class StreamingDataExampleView extends VerticalLayout {   // extends Exam
                         .withTickAmount(oYtick)
                         .build())*/
                 .withSeries(new Series<>(0))
+                .withTitle(TitleSubtitleBuilder.get()
+                     .withText(title)
+                     .withAlign(Align.center)
+                    .build())
                 .build();
 
         chart.setDebug(true);
@@ -85,6 +87,7 @@ public class StreamingDataExampleView extends VerticalLayout {   // extends Exam
                     arrayList.add(nextValueDouble);
                     getUI().ifPresent(ui -> ui.access(() -> chart.updateSeries(new Series<>(arrayList.toArray(new Double[]{})))));
                 } else {
+                    //po zakończeniu symulacji ustaw flagę czyszczenia wykresu
                     clearChartData = true;
                 }
                 //save actual status to previous
