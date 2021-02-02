@@ -53,9 +53,16 @@ public class MaterialService {
     public void populateTestData(){
         if(materialRepository.count() == 0){
             materialRepository.saveAll(
-                    Stream.of("Copper; 0.0000168; 770.95; 21.2",
-                            "Brass; 0.0000193; 772.45; 21.1",
-                            "Steel; 0.0000118; 771.00; 21.3")
+                    Stream.of("Copper; 0.00017; 770.95; 20.0",
+                            "Brass; 0.00019; 772.45; 20.0",
+                            "Aluminium;0.000231;0;20.0",
+                            "Magnesium;0.00026;0;20.0",
+                            "Gold;0.00014;0;20.0",
+                            "Iron;0.000118;0;20.0",
+                            "Diamond;0.00001;0;20.0",
+                            "Lead;0.00020;0;20.0",
+                            "Platinum;0.00009;0;20.0",
+                            "Steel; 0.00013; 771.00; 20.0")
                             .map(line->{
                                 String[] split = line.split(";");
                                 Material material = new Material();

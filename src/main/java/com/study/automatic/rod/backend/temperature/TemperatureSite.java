@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -32,74 +33,79 @@ public class TemperatureSite extends VerticalLayout {
     public TemperatureSite(MaterialService materialService) {
 
 
-        Label area1=new Label("This is the first main use of the application. The app will show temperature needed to be maintained in order to obtain a wire from the material available in the database of the selected length. Start at room temperature: 20◦C for the starting length = 200 [mm]. ");//First main use of the application
-        Label area2=new Label("Please choose the material:");
-        Div message = new Div();
-        Icon logoV = new Icon(VaadinIcon.QUESTION_CIRCLE_O);
-        logoV.getStyle().set("question_circle_o", "pointer");
-        logoV.addClickListener(
-                event -> message.setText("Material depends costam!"));
-        VerticalLayout layout=new VerticalLayout();
 
-        Label emptyLabel2 = new Label("");
-        emptyLabel2.setHeight("2em");
+        add(mainBox(materialService));
 
-        ComboBox<Material> chooseMaterial=new ComboBox();
-        List<Material> materials = materialService.findAll();
-        materials.sort(Comparator.comparing(Material::getName, String::compareToIgnoreCase));
-        chooseMaterial.setItems(materials);
-
-        chooseMaterial.setItemLabelGenerator(Material::getName);
-        NumberField numberField = new NumberField("New length in millimeters");
-        numberField.setValue(200d);
-        numberField.setHasControls(true);
-        numberField.setMinWidth("200px");
-        numberField.setMin(200);
-        numberField.setMax(500);
-        // Create a vertical slider
-
-        logoV.getElement().setProperty("title", "Your material starting length is 0,200m so please choose new length. Remember that for longer material more temperature is needed.");//napisac ladniej
-        Double Tstart=20.0;//st C
-        Double Lstart= 0.200;//m
-
-        //Double a=0.00013;
-        TextArea wynik=new TextArea("Your needed temperature is: ");
-        wynik.setReadOnly(true);
-        wynik.setMinWidth("600px");
-
-        wynik.setValue("Please choose any material");
-        Button click= new Button("Apply changes",buttonClickEvent -> {
-////
-            Double Tend;
-            Double Lend=numberField.getValue();
-            //System.out.println(chooseMaterial.getValue().getAlpha());
-            Double a=chooseMaterial.getValue().getAlpha();
-            Tend=Tstart+((Lend*0.001-Lstart)/(Lstart*a));
-            wynik.setValue(Tend +" [◦C]");
-
-
-
-        });
-        click.setEnabled(false);
-        chooseMaterial.addValueChangeListener(event -> {click.setEnabled(true);});
-
-
-
-
-
-
-
-        add(area1);
-        layout.addComponentAsFirst(emptyLabel2);
-        add(area2);
-        add(chooseMaterial,logoV);
-        add(numberField);
-
-        add(click);
-        add(wynik);
 
     }
 
+private VerticalLayout mainBox(MaterialService materialService){
+    VerticalLayout widok=new VerticalLayout();
+    VerticalLayout middleLeft1=new VerticalLayout();
+    HorizontalLayout mid=new HorizontalLayout();
+    HorizontalLayout guz=new HorizontalLayout();
+    VerticalLayout midM=new VerticalLayout();
+    VerticalLayout middleRight=new VerticalLayout();
+
+    Label area2=new Label("Prosze wybrac material:");
+    Label area3=new Label("Nowa dlugosc [mm]");
+    Label area4=new Label("Oblicz Temperature");
+    Icon logoV = new Icon(VaadinIcon.QUESTION_CIRCLE_O);
+    logoV.getStyle().set("question_circle_o", "pointer");
+
+    VerticalLayout layout=new VerticalLayout();
+    Label emptyLabel2 = new Label("");
+    emptyLabel2.setHeight("2em");
+    logoV.getElement().setProperty("title", "Startowa dlugosc materialu to 0,2 [m] wiec wybierz docelowa dlugosc. Pamietaj, ze dla im wieksza dlugosc tym wieksza temperatura.");
+
+    Label area1=new Label("To pierwsze glowne zastosowanie projektu. Na tej stronie mozesz sprawdzic jaka temperatura jest wymagana do wydluzenia jednego z dostepnych materialow o poczatkowej dlugosc 200 [mm]. Aby otrzymac potrzebna temperature do wydluzenia prosze wybrac material oraz nowa dlugosc. Temperatura zalezy glownie od wspolczynnika alfa materialu. Startowa temperatura to  20◦C  " );
+    NumberField numberField = new NumberField();
+    numberField.setValue(200d);
+    numberField.setHasControls(true);
+    numberField.setMinWidth("200px");
+    numberField.setMin(200);
+    numberField.setMax(500);
+    ComboBox<Material> chooseMaterial=new ComboBox();
+    List<Material> materials = materialService.findAll();
+    materials.sort(Comparator.comparing(Material::getName, String::compareToIgnoreCase));
+    chooseMaterial.setItems(materials);
+    chooseMaterial.setItemLabelGenerator(Material::getName);
+    TextArea wynik=new TextArea("Temperatura potrzebna do wydluzenia wynosi: ");
+    wynik.setReadOnly(true);
+    wynik.setMinWidth("600px");
+
+    wynik.setValue("Prosze wybrac dowolny material");
+
+    Button click= new Button("zatwierdz zmiany",buttonClickEvent -> {
+////
+        Double Tstart=20.0;//st C
+        Double Lstart= 0.200;//m
+
+        Double Tend;
+        Double Lend=numberField.getValue();
+        //System.out.println(chooseMaterial.getValue().getAlpha());
+        Double a=chooseMaterial.getValue().getAlpha();
+        Tend=Tstart+((Lend*0.001-Lstart)/(Lstart*a));
+        wynik.setValue(Tend +" [◦C]");
+
+
+
+    });
+    click.setEnabled(false);
+    chooseMaterial.addValueChangeListener(event -> {click.setEnabled(true);});
+
+
+    //tworzenie widoku
+    middleLeft1.add(area2,chooseMaterial);//napis wyboru materialu i wybor z listy
+    guz.add(area4,logoV);
+    middleRight.add(guz,click);
+    midM.add(area3,numberField);
+    mid.add(middleLeft1,midM,middleRight);//srdkowy segment z wyborem materialu, nowa dlugosc guzik startu i icona pomocnicza
+     widok.add(area1,mid,wynik);   //final look
+
+
+    return widok;
+}
 
 
 
