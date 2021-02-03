@@ -110,6 +110,16 @@ public class SamplingView extends VerticalLayout {
         chartTemp = new ChartLive("temp");
         chartTempDelta = new ChartLive("tempDelta");
 
+        String chartWidth = "500px";
+        chartX.setWidth(chartWidth);
+        chartTotal.setWidth(chartWidth);
+        chartY.setWidth(chartWidth);
+        chartXDelta.setWidth(chartWidth);
+        chartTotalDelta.setWidth(chartWidth);
+        chartYDelta.setWidth(chartWidth);
+        chartTemp.setWidth(chartWidth);
+        chartTempDelta.setWidth(chartWidth);
+
         //initialize layout array
         HorizontalLayout[] chartsLevels = new HorizontalLayout[3];
         for (int i=0; i<chartsLevels.length; i++) {
@@ -118,14 +128,15 @@ public class SamplingView extends VerticalLayout {
         }
 
         chartsLevels[0].add(chartX, chartTotal, chartY);
-        /*chartsLevels[1].add(chartXDelta, chartTotalDelta, chartYDelta);
-        chartsLevels[2].add(chartTemp, chartTempDelta);*/
+        chartsLevels[1].add(chartXDelta, chartTotalDelta, chartYDelta);
+        chartsLevels[2].add(chartTemp, chartTempDelta);
 
         VerticalLayout chartsLayout = new VerticalLayout();
         for (HorizontalLayout level: chartsLevels){
             chartsLayout.add(level);
         }//for
-        chartsLayout.setSizeFull();
+        //chartsLayout.setWidth("1000px");
+        //chartsLayout.setHeight("1000px");
         return chartsLayout;
     }
 
@@ -400,8 +411,10 @@ public class SamplingView extends VerticalLayout {
 
     private VerticalLayout temperatureAndControls(){
         VerticalLayout tc = new VerticalLayout();
+        tc.setSizeFull();
 
         temperatureLayout = new VerticalLayout();
+        temperatureLayout.setSizeFull();
         FormLayout buttonsLayout = new FormLayout();
 
         NumberField temperatureBegin = new NumberField();
@@ -425,6 +438,9 @@ public class SamplingView extends VerticalLayout {
             temperatureBegin.setMin(temperatureMin.getValue());
         });
 
+        temperatureBegin.setSizeFull();
+        temperatureMin.setSizeFull();
+        temperatureMax.setSizeFull();
 
         temperatureBegin.setValue(beginTemp);
         temperatureBegin.setHasControls(true);
@@ -437,6 +453,8 @@ public class SamplingView extends VerticalLayout {
 
         Button random = new Button("Randomly");
         Button manual = new Button("Manually");
+        random.setSizeFull();
+        manual.setSizeFull();
         manual.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
 
         random.addClickListener(buttonClickEvent -> {
