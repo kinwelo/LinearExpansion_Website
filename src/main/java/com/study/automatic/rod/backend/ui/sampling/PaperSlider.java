@@ -26,4 +26,13 @@ public class PaperSlider
     public void setMin(int min){
         this.getElement().setProperty("min", min);
     }
+
+    public int getMax(){
+        return this.getElement().getProperty("max", 1);
+    }
+
+    public int getMin(){
+        return this.getElement().getProperty("min", 1);
+    }
+
 }

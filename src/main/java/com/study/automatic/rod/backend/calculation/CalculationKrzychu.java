@@ -65,6 +65,12 @@ public class CalculationKrzychu {
     }
 
     /***
+     * Constructor for all calculations. Remember to use setBeginValues.
+     */
+    public CalculationKrzychu() {
+    }
+
+    /***
      * Set begin values for all variables. Should be used at the beggining of each simulation.
      * @param x length of material A
      * @param y length of material B
@@ -384,5 +390,21 @@ public class CalculationKrzychu {
      */
     public double getTempDelta() {
         return tempDelta;
+    }
+
+    /***
+     * Give informations about calculation variables.
+     * @return variables description String.
+     */
+    @Override
+    public String toString() {
+        return "CalculationKrzychu{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", xAlpha=" + xAlpha +
+                ", yAlpha=" + yAlpha +
+                ", temp=" + temp +
+                '}';
     }
 }//CalculationKrzychu
