@@ -3,6 +3,7 @@ package com.study.automatic.rod.backend.ui;
 import com.study.automatic.rod.backend.temperature.TemperatureSite;
 import com.study.automatic.rod.backend.ui.material.MaterialView;
 import com.study.automatic.rod.backend.ui.sampling.SamplingView;
+import com.study.automatic.rod.backend.samplingMarek.SamplingViewMarek;
 import com.study.automatic.rod.backend.ui.workstation.WorkstationView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -60,8 +61,9 @@ public class MainLayout extends AppLayout {
         RouterLink how_to_calculate_alphaLink = new RouterLink("Project info", HowToCalculateAlphaView.class);
         //RouterLink streamingDataExampleViewLink = new RouterLink("StreamingDataExample", StreamingDataExampleView.class);
         RouterLink samplingLink = new RouterLink("SamplingView", SamplingView.class);
+        RouterLink samplingLinkM = new RouterLink("SamplingViewMarek", SamplingViewMarek.class);
         RouterLink calculatetemperatureLink = new RouterLink("Calculate temperature ", TemperatureSite.class);//1 zastosowanie
-        List<RouterLink> links = Arrays.asList(materialLink, workstationLink, how_to_calculate_alphaLink,calculatetemperatureLink, samplingLink);
+        List<RouterLink> links = Arrays.asList(materialLink, workstationLink, how_to_calculate_alphaLink,calculatetemperatureLink, samplingLink,samplingLinkM);
         for (RouterLink link: links){
             link.setHighlightCondition(HighlightConditions.sameLocation());
             addToDrawer(new VerticalLayout(link));
