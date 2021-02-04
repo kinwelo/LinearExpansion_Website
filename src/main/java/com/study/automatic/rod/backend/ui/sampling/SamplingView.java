@@ -48,13 +48,13 @@ public class SamplingView extends VerticalLayout {
     private Sample sample;
     private int sliderValueChanged = 0; //pozwala na update wykresów w kolejnej iteracji po zmianie wartości suwaka.
     private ChartLive chartX;
-    private ChartLive chartXDelta;       ;
+    //private ChartLive chartXDelta;       ;
     private ChartLive chartY;
-    private ChartLive chartYDelta;
+    //private ChartLive chartYDelta;
     private ChartLive chartTotal;
     private ChartLive chartTotalDelta;
-    //private ChartLive chartTemp;
-    //private ChartLive chartTempDelta;
+    private ChartLive chartTemp;
+    private ChartLive chartTempDelta;
 
     private PaperSlider paperSlider;
     private final Label sliderValueLabel;
@@ -83,7 +83,7 @@ public class SamplingView extends VerticalLayout {
         sliderValueLabel = new Label("Suwak temperatury układu [°C]:");
         Label descriptionLabel=new Label("Okno symulacyjne regulatora PID, którego zadaniem jest utrzymanie zadanej odległości pomiędzy dwoma materiałami w zmiennej temperaturze. Zależnie od temperatury dystans pomiędzy uchwytami materiałów zmienia się. Temperaturę możemy zadawać własnoręcznie przy pomocy suwaka (przycisk \"Manualnie\" aktywny na zielono) lub po wyborze przycisku \"Losowo\" system będzie generował kolejne wartości. Opcja rozpoczęcia symulacji uaktywni się po wybraniu materiałów A i B.\n" +
                 "\n" +
-                "Wykres \"Zmiana długości całkowitej układu\" jest kluczowy i obrazuje działanie regulatora prowadzącego bierzące korekty dystansu pomiędzy uchwytami materiałów. Pozostałe wykresy przedstawiają wartości całkowite oraz zmiany w czasie dla poszczególnych składowych układu.");
+                "Wykres \"Zmiana długości całkowitej układu\" jest kluczowy i obrazuje działanie regulatora prowadzącego bierzące korekty dystansu pomiędzy uchwytami materiałów. Pozostałe wykresy przedstawiają wartości całkowite oraz zmiany w czasie dla poszczególnych składowych układu. W przypadku uciętych opisów dopasować przy pomocy Ctrl +-");
 
         paperSlider.setMin((int)minTemp);
         paperSlider.setMax((int)maxTemp);
@@ -102,26 +102,26 @@ public class SamplingView extends VerticalLayout {
 
     private VerticalLayout createChartsLayout() {
         //initialize charts
-        chartX = new ChartLive("Długość materiału A [mm]", "X", "temp");
-        chartTotal = new ChartLive("Długość całkowita układu [mm]", "Dł. całkowita", "temp");
-        chartY = new ChartLive("Długość materiału B [mm]", "Y", "temp");
+        chartX = new ChartLive("Długość materiału A [mm]", "X", "#1E90FF");
+        chartTotal = new ChartLive("Długość całkowita układu [mm]", "Dł. całkowita", "#1E90FF");
+        chartY = new ChartLive("Długość materiału B [mm]", "Y", "#1E90FF");
 
-        chartXDelta = new ChartLive("Zmiana długości materiału A [mm]", "ΔX", "Δtemp");
-        chartTotalDelta = new ChartLive("Zmiana długości całkowitej układu [mm]", "ΔCałkowita", "Δtemp");
-        chartYDelta = new ChartLive(" Zmiana długości materiału B [mm]", "ΔX", "Δtemp");
+        //chartXDelta = new ChartLive("Zmiana długości materiału A [mm]", "ΔX", "#1E90FF");
+        chartTotalDelta = new ChartLive("Zmiana długości całkowitej układu [mm]", "ΔCałkowita", "#1E90FF");
+        //chartYDelta = new ChartLive(" Zmiana długości materiału B [mm]", "ΔX", "#1E90FF");
 
-        //chartTemp = new ChartLive("Temperatura [◦C]", "T", "temp");
-        //chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT", "Δtemp");
+        chartTemp = new ChartLive("Temperatura [◦C]", "T", "#E91E63");
+        chartTempDelta = new ChartLive("Zmiana temperatury [◦C]", "ΔT", "#E91E63");
 
         String chartWidth = "500px";
         chartX.setWidth(chartWidth);
         chartTotal.setWidth(chartWidth);
         chartY.setWidth(chartWidth);
-        chartXDelta.setWidth(chartWidth);
-        chartTotalDelta.setWidth(chartWidth);
-        chartYDelta.setWidth(chartWidth);
-        //chartTemp.setWidth(chartWidth);
-        //chartTempDelta.setWidth(chartWidth);
+        //chartXDelta.setWidth(chartWidth);
+        chartTotalDelta.setWidth("500px");
+        //chartYDelta.setWidth(chartWidth);
+        chartTemp.setWidth(chartWidth);
+        chartTempDelta.setWidth(chartWidth);
 
         //initialize layout array
         HorizontalLayout[] chartsLevels = new HorizontalLayout[3];
@@ -130,8 +130,8 @@ public class SamplingView extends VerticalLayout {
             chartsLevels[i].setSizeFull();
         }
 
-        chartsLevels[0].add(chartX, chartTotal, chartY);
-        chartsLevels[1].add(chartXDelta, chartTotalDelta, chartYDelta);
+        chartsLevels[0].add(chartTemp, chartTotalDelta, chartTempDelta);
+        chartsLevels[1].add(chartX, chartTotal, chartY);
         //chartsLevels[2].add(chartTemp, chartTempDelta);
 
         VerticalLayout chartsLayout = new VerticalLayout();
@@ -207,26 +207,26 @@ public class SamplingView extends VerticalLayout {
         //calculation.settActual(paperSlider.getValue());
 
         chartX.setNextValue1(calculation.getX());
-        chartX.setNextValue2(calculation.getTemp());
+        //chartX.setNextValue2(calculation.getTemp());
 
-        chartXDelta.setNextValue1(calculation.getxDelta());
-        chartXDelta.setNextValue2(calculation.getTempDelta());
+        //chartXDelta.setNextValue1(calculation.getxDelta());
+        //chartXDelta.setNextValue2(calculation.getTempDelta());
 
         chartY.setNextValue1(calculation.getY());
-        chartY.setNextValue2(calculation.getTemp());
+        //chartY.setNextValue2(calculation.getTemp());
 
-        chartYDelta.setNextValue1(calculation.getyDelta());
-        chartYDelta.setNextValue2(calculation.getTempDelta());
+        //chartYDelta.setNextValue1(calculation.getyDelta());
+        //chartYDelta.setNextValue2(calculation.getTempDelta());
 
         chartTotal.setNextValue1(calculation.getTotal());
-        chartTotal.setNextValue2(calculation.getTemp());
+        //chartTotal.setNextValue2(calculation.getTemp());
 
         chartTotalDelta.setNextValue1(calculation.getTotalDelta());
-        chartTotalDelta.setNextValue2(calculation.getTempDelta());
+        //chartTotalDelta.setNextValue2(calculation.getTempDelta());
 
-        //chartTemp.setNextValue1(calculation.getTemp());
+        chartTemp.setNextValue1(calculation.getTemp());
         //chartTemp.setNextValue2(calculation.getTemp());
-        //chartTempDelta.setNextValue1(calculation.getTempDelta());
+        chartTempDelta.setNextValue1(calculation.getTempDelta());
         //chartTempDelta.setNextValue2(calculation.getTempDelta());
     }
 
@@ -246,13 +246,13 @@ public class SamplingView extends VerticalLayout {
 
     private void setChartTreadRunning(boolean isRunning){
         chartX.setRunThread(isRunning);
-        chartXDelta.setRunThread(isRunning);
+        //chartXDelta.setRunThread(isRunning);
         chartY.setRunThread(isRunning);
-        chartYDelta.setRunThread(isRunning);
+        //chartYDelta.setRunThread(isRunning);
         chartTotal.setRunThread(isRunning);
         chartTotalDelta.setRunThread(isRunning);
-        //chartTemp.setRunThread(isRunning);
-        //chartTempDelta.setRunThread(isRunning);
+        chartTemp.setRunThread(isRunning);
+        chartTempDelta.setRunThread(isRunning);
     }
 
     private void startSampling() {

@@ -28,7 +28,7 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
     boolean clearChartData = true;
     static private boolean isThreadRunning = false;
     private double nextValue1 = -200;
-    private double nextValue2 = -200;
+    //private double nextValue2 = -200;
 
 //
     /*private double oYmin = 0;
@@ -38,14 +38,14 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
     private final ApexCharts chart;
     private Thread thread;
 
-    public ChartLive(String title, String series1title, String series2title) {
+    public ChartLive(String title, String series1title, String series1color) {
         setSizeFull();
 
         Series series1 = new Series(series1title);
-        Series series2 = new Series(series2title);
+        //Series series2 = new Series(series2title);
 
         String color1 = "#1E90FF";
-        String color2 = "#E91E63";
+        //String color2 = "#E91E63";
 
         chart = ApexChartsBuilder.get().withChart(ChartBuilder.get()
                 .withType(Type.area)
@@ -88,12 +88,12 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
                                 .withText("Długość [mm]")
                                 .build())
                         .build())
-                .withSeries(series1, series2)
+                .withSeries(series1)
                 .withTitle(TitleSubtitleBuilder.get()
                      .withText(title)
                      .withAlign(Align.center)
                     .build())
-                .withColors(color1, color2)
+                .withColors(series1color)
                 .build();
 
         chart.setDebug(true);
@@ -105,7 +105,7 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
         super.onAttach(attachEvent);
         thread = new Thread(() -> {
             ArrayList<Double> series1data = new ArrayList<>();
-            ArrayList<Double> series2data = new ArrayList<>();
+            //ArrayList<Double> series2data = new ArrayList<>();
 
             while (true) {
                 try {
@@ -117,13 +117,13 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
                     //clear chart before next run
                     if(clearChartData){
                         series1data.clear();
-                        series2data.clear();
+                        //series2data.clear();
                         clearChartData = false;
                     }
                     series1data.add(nextValue1);
-                    series2data.add(nextValue2);
+                    //series2data.add(nextValue2);
 
-                    getUI().ifPresent(ui -> ui.access(() -> chart.updateSeries(new Series<>(series1data.toArray(new Double[]{})), new Series<>(series2data.toArray(new Double[]{})))));
+                    getUI().ifPresent(ui -> ui.access(() -> chart.updateSeries(new Series<>(series1data.toArray(new Double[]{})))));
                 } else {
                     //po zakończeniu symulacji ustaw flagę czyszczenia wykresu
                     clearChartData = true;
@@ -149,13 +149,13 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
         this.nextValue1 = nextValue1;
     }
 
-    public double getNextValue2() {
-        return nextValue2;
-    }
+    //public double getNextValue2() {
+    //    return nextValue2;
+    //}
 
-    public void setNextValue2(double nextValue2) {
-        this.nextValue2 = nextValue2;
-    }
+    //public void setNextValue2(double nextValue2) {
+    //    this.nextValue2 = nextValue2;
+    //}
 
     public boolean isRunThread() {
         return isThreadRunning;
