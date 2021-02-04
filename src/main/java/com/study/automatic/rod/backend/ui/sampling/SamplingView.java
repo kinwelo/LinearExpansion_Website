@@ -53,8 +53,8 @@ public class SamplingView extends VerticalLayout {
     private ChartLive chartYDelta;
     private ChartLive chartTotal;
     private ChartLive chartTotalDelta;
-    private ChartLive chartTemp;
-    private ChartLive chartTempDelta;
+    //private ChartLive chartTemp;
+    //private ChartLive chartTempDelta;
 
     private PaperSlider paperSlider;
     private final Label sliderValueLabel;
@@ -80,8 +80,10 @@ public class SamplingView extends VerticalLayout {
 
     public SamplingView(SampleService sampleService, RecordService recordService, MaterialService materialService){
         this.paperSlider = new PaperSlider();
-        sliderValueLabel = new Label("Suwak temperatury układu:");
-        Label descriptionLabel=new Label("Witaj w oknie głównym symulacji. Proszę wybrać konfigurację symulacji (Materiały, temperatura i długośc) dla środowiska z poniższej grafiki, aby następnie rozpocząć symulację w jednym z dwóch trybów. W trybie manualnym każda zmiana suwaka spowoduje zakłócenie oraz reakcję układu powodującą utrzymanie długości Z pomiędzy prętami. Drugi tryb w sposób losowy dobiera kolejne temperatury, które analogicznie wpływają na zachowanie symulacji widoczne na wykresach. Jednostki wielkości to odpowiednio stopnie Celsjusza dla temperatur i milimetry dla  wszystkich długości i odległości.");
+        sliderValueLabel = new Label("Suwak temperatury układu [°C]:");
+        Label descriptionLabel=new Label("Okno symulacyjne regulatora PID, którego zadaniem jest utrzymanie zadanej odległości pomiędzy dwoma materiałami w zmiennej temperaturze. Zależnie od temperatury dystans pomiędzy uchwytami materiałów zmienia się. Temperaturę możemy zadawać własnoręcznie przy pomocy suwaka (przycisk \"Manualnie\" aktywny na zielono) lub po wyborze przycisku \"Losowo\" system będzie generował kolejne wartości. Opcja rozpoczęcia symulacji uaktywni się po wybraniu materiałów A i B.\n" +
+                "\n" +
+                "Wykres \"Zmiana długości całkowitej układu\" jest kluczowy i obrazuje działanie regulatora prowadzącego bierzące korekty dystansu pomiędzy uchwytami materiałów. Pozostałe wykresy przedstawiają wartości całkowite oraz zmiany w czasie dla poszczególnych składowych układu.");
 
         paperSlider.setMin((int)minTemp);
         paperSlider.setMax((int)maxTemp);
@@ -100,16 +102,16 @@ public class SamplingView extends VerticalLayout {
 
     private VerticalLayout createChartsLayout() {
         //initialize charts
-        chartX = new ChartLive("Długość materiału X[mm]", "X", "temp");
-        chartTotal = new ChartLive("Długość całkowita [mm]", "Dł. całkowita", "temp");
-        chartY = new ChartLive("Długość materiału Y[mm]", "Y", "temp");
+        chartX = new ChartLive("Długość materiału A [mm]", "X", "temp");
+        chartTotal = new ChartLive("Długość całkowita układu [mm]", "Dł. całkowita", "temp");
+        chartY = new ChartLive("Długość materiału B [mm]", "Y", "temp");
 
-        chartXDelta = new ChartLive("zmiana Delta X[mm]", "ΔX", "Δtemp");
-        chartTotalDelta = new ChartLive("Delta całkowita [mm]", "ΔCałkowita", "Δtemp");
-        chartYDelta = new ChartLive(" zmiana Delta X[mm]", "ΔX", "Δtemp");
+        chartXDelta = new ChartLive("Zmiana długości materiału A [mm]", "ΔX", "Δtemp");
+        chartTotalDelta = new ChartLive("Zmiana długości całkowitej układu [mm]", "ΔCałkowita", "Δtemp");
+        chartYDelta = new ChartLive(" Zmiana długości materiału B [mm]", "ΔX", "Δtemp");
 
-        chartTemp = new ChartLive("Temperatura [◦C]", "T", "temp");
-        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT", "Δtemp");
+        //chartTemp = new ChartLive("Temperatura [◦C]", "T", "temp");
+        //chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT", "Δtemp");
 
         String chartWidth = "500px";
         chartX.setWidth(chartWidth);
@@ -118,8 +120,8 @@ public class SamplingView extends VerticalLayout {
         chartXDelta.setWidth(chartWidth);
         chartTotalDelta.setWidth(chartWidth);
         chartYDelta.setWidth(chartWidth);
-        chartTemp.setWidth(chartWidth);
-        chartTempDelta.setWidth(chartWidth);
+        //chartTemp.setWidth(chartWidth);
+        //chartTempDelta.setWidth(chartWidth);
 
         //initialize layout array
         HorizontalLayout[] chartsLevels = new HorizontalLayout[3];
@@ -130,7 +132,7 @@ public class SamplingView extends VerticalLayout {
 
         chartsLevels[0].add(chartX, chartTotal, chartY);
         chartsLevels[1].add(chartXDelta, chartTotalDelta, chartYDelta);
-        chartsLevels[2].add(chartTemp, chartTempDelta);
+        //chartsLevels[2].add(chartTemp, chartTempDelta);
 
         VerticalLayout chartsLayout = new VerticalLayout();
         for (HorizontalLayout level: chartsLevels){
@@ -159,8 +161,8 @@ public class SamplingView extends VerticalLayout {
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
 
-        startButton = new Button("Rozpocznij symulacje");
-        stopButton = new Button("Zakoncz symulacje");
+        startButton = new Button("Rozpocznij symulację");
+        stopButton = new Button("Zakończ symulację");
 
         startButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         stopButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -222,10 +224,10 @@ public class SamplingView extends VerticalLayout {
         chartTotalDelta.setNextValue1(calculation.getTotalDelta());
         chartTotalDelta.setNextValue2(calculation.getTempDelta());
 
-        chartTemp.setNextValue1(calculation.getTemp());
-        chartTemp.setNextValue2(calculation.getTemp());
-        chartTempDelta.setNextValue1(calculation.getTempDelta());
-        chartTempDelta.setNextValue2(calculation.getTempDelta());
+        //chartTemp.setNextValue1(calculation.getTemp());
+        //chartTemp.setNextValue2(calculation.getTemp());
+        //chartTempDelta.setNextValue1(calculation.getTempDelta());
+        //chartTempDelta.setNextValue2(calculation.getTempDelta());
     }
 
     private void setStartEnable(){
@@ -249,8 +251,8 @@ public class SamplingView extends VerticalLayout {
         chartYDelta.setRunThread(isRunning);
         chartTotal.setRunThread(isRunning);
         chartTotalDelta.setRunThread(isRunning);
-        chartTemp.setRunThread(isRunning);
-        chartTempDelta.setRunThread(isRunning);
+        //chartTemp.setRunThread(isRunning);
+        //chartTempDelta.setRunThread(isRunning);
     }
 
     private void startSampling() {
@@ -373,8 +375,8 @@ public class SamplingView extends VerticalLayout {
         chooseMaterialX.setItemLabelGenerator(Material::getName);
         chooseMaterialY.setItems(materials);
         chooseMaterialY.setItemLabelGenerator(Material::getName);
-        chooseMaterialX.setLabel("Wybierz materiał A(x):");
-        chooseMaterialY.setLabel("Wybierz materiał B(y):");
+        chooseMaterialX.setLabel("Wybierz materiał A:");
+        chooseMaterialY.setLabel("Wybierz materiał B:");
         chooseMaterialX.addValueChangeListener(e -> {
             materialA = e.getValue();
             startButton.setEnabled(!chooseMaterialX.isEmpty() && !chooseMaterialY.isEmpty());
@@ -388,7 +390,7 @@ public class SamplingView extends VerticalLayout {
         materialLengthX.setValue(beginX);
         materialLengthX.setHasControls(true);
         materialLengthX.setStep(1);
-        materialLengthX.setLabel("Długość początkowa A(x): ");
+        materialLengthX.setLabel("Długość początkowa A (X)[mm]: ");
 
         materialLengthX.addValueChangeListener(e->{
             this.beginX = e.getValue();
@@ -398,7 +400,7 @@ public class SamplingView extends VerticalLayout {
         materialLengthY.setValue(beginY);
         materialLengthY.setHasControls(true);
         materialLengthY.setStep(1);
-        materialLengthY.setLabel("Długość początkowa B(y): ");
+        materialLengthY.setLabel("Długość początkowa B (Y)[mm]: ");
 
         materialLengthY.addValueChangeListener(e->{
             this.beginY = e.getValue();
@@ -408,7 +410,7 @@ public class SamplingView extends VerticalLayout {
         distanceControlZ.setValue(beginZ);
         distanceControlZ.setHasControls(true);
         distanceControlZ.setStep(1);
-        distanceControlZ.setLabel("Odległość Z (do utrzymania pomiędzy A i B): ");
+        distanceControlZ.setLabel("Zadana odległość pomiędzy A i B (Z)[mm]: ");
 
         distanceControlZ.addValueChangeListener(e->{
             this.beginZ = e.getValue();
@@ -437,7 +439,7 @@ public class SamplingView extends VerticalLayout {
         temperatureMax.setValue(maxTemp);
         temperatureMax.setHasControls(true);
         temperatureMax.setStep(5);
-        temperatureMax.setLabel("Temperatura maksymalna: ");
+        temperatureMax.setLabel("Temperatura maksymalna [°C]: ");
         temperatureMax.addValueChangeListener(numberFieldDoubleComponentValueChangeEvent -> {
             paperSlider.setMax((int) Math.round(temperatureMax.getValue()));
             temperatureBegin.setMax(temperatureMax.getValue());
@@ -447,7 +449,7 @@ public class SamplingView extends VerticalLayout {
         temperatureMin.setValue(minTemp);
         temperatureMin.setHasControls(true);
         temperatureMin.setStep(5);
-        temperatureMin.setLabel("Temperatura minimalna: ");
+        temperatureMin.setLabel("Temperatura minimalna [°C]: ");
         temperatureMin.addValueChangeListener(numberFieldDoubleComponentValueChangeEvent -> {
             paperSlider.setMin((int) Math.round(temperatureMin.getValue()));
             temperatureBegin.setMin(temperatureMin.getValue());
@@ -462,10 +464,11 @@ public class SamplingView extends VerticalLayout {
         temperatureBegin.setStep(5);
         temperatureBegin.setMax(temperatureMax.getValue());
         temperatureBegin.setMin(temperatureMin.getValue());
-        temperatureBegin.setLabel("Temperatura poczatkowa: ");
+        temperatureBegin.setLabel("Temperatura poczatkowa [°C]: ");
 
         temperatureLayout.add(temperatureBegin, temperatureMax, temperatureMin);
 
+        Label randomManual = new Label("Wybór sposobu zadawania temperatury:");
         Button random = new Button("Losowo");
         Button manual = new Button("Manualnie");
         random.setSizeFull();
@@ -489,7 +492,7 @@ public class SamplingView extends VerticalLayout {
         HorizontalLayout buttons = new HorizontalLayout();
         buttons.add(random, manual);
 
-        buttonsLayout.add(buttons, createSimulationButtonLayout());
+        buttonsLayout.add(randomManual, buttons, createSimulationButtonLayout());
 
         tc.getStyle().set("border", "3px solid #9E9E9E");
 
