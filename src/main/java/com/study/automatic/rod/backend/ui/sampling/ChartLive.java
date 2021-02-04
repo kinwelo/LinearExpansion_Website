@@ -44,6 +44,9 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
         Series series1 = new Series(series1title);
         Series series2 = new Series(series2title);
 
+        String color1 = "#1E90FF";
+        String color2 = "#E91E63";
+
         chart = ApexChartsBuilder.get().withChart(ChartBuilder.get()
                 .withType(Type.area)
                 .withAnimations(AnimationsBuilder.get()
@@ -90,6 +93,7 @@ public class ChartLive extends VerticalLayout {   // extends ExampleHolderView
                      .withText(title)
                      .withAlign(Align.center)
                     .build())
+                .withColors(color1, color2)
                 .build();
 
         chart.setDebug(true);
