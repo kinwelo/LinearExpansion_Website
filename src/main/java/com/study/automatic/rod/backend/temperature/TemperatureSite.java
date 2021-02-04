@@ -47,6 +47,7 @@ private VerticalLayout mainBox(MaterialService materialService){
     VerticalLayout midM=new VerticalLayout();
     VerticalLayout middleRight=new VerticalLayout();
 
+
     Label area2=new Label("Proszę wybrać materiał:");
     Label area3=new Label("Nowa długość [mm]");
     Label area4=new Label("Oblicz Temperature");
@@ -76,7 +77,7 @@ private VerticalLayout mainBox(MaterialService materialService){
 
     wynik.setValue("Proszę wybrać dowolny materiał");
 
-    Button click= new Button("zatwierdź zmiany",buttonClickEvent -> {
+    Button click= new Button("Zatwierdź zmiany",buttonClickEvent -> {
 ////
         Double Tstart=20.0;//st C
         Double Lstart= 0.200;//m
@@ -100,8 +101,8 @@ private VerticalLayout mainBox(MaterialService materialService){
     guz.add(area4,logoV);
     middleRight.add(guz,click);
     midM.add(area3,numberField);
-    mid.add(middleLeft1,midM,middleRight);//srdkowy segment z wyborem materialu, nowa dlugosc guzik startu i icona pomocnicza
-     widok.add(area1,mid,wynik);   //final look
+    mid.add(middleLeft1,midM);//srdkowy segment z wyborem materialu, nowa dlugosc guzik startu i icona pomocnicza
+     widok.add(area1,mid,middleRight,wynik);   //final look
 
 
     return widok;

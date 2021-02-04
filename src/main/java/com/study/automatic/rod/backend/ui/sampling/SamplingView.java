@@ -101,16 +101,16 @@ public class SamplingView extends VerticalLayout {
 
     private VerticalLayout createChartsLayout() {
         //initialize charts
-        chartX = new ChartLive("Dlugosc materialu X[mm]");
-        chartTotal = new ChartLive("Dlugosc calkowita [mm]");
-        chartY = new ChartLive("Dlugosc materialu Y[mm]");
+        chartX = new ChartLive("Długość materiału X[mm]", "X");
+        chartTotal = new ChartLive("Długość całkowita [mm]", "Dł. całkowita");
+        chartY = new ChartLive("Długość materiału Y[mm]", "Y");
 
-        chartXDelta = new ChartLive("zmiana Delta X[mm]");
-        chartTotalDelta = new ChartLive("Delta calkowita [mm]");
-        chartYDelta = new ChartLive(" zmiana Delta X[mm]");
+        chartXDelta = new ChartLive("zmiana Delta X[mm]", "ΔX");
+        chartTotalDelta = new ChartLive("Delta całkowita [mm]", "ΔCałkowita");
+        chartYDelta = new ChartLive(" zmiana Delta X[mm]", "ΔX");
 
-        chartTemp = new ChartLive("Temperatura [◦C]");
-        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]");
+        chartTemp = new ChartLive("Temperatura [◦C]", "T");
+        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT");
 
         String chartWidth = "500px";
         chartX.setWidth(chartWidth);
