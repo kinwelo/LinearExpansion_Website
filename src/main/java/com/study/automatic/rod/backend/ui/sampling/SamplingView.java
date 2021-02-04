@@ -18,7 +18,6 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -101,16 +100,16 @@ public class SamplingView extends VerticalLayout {
 
     private VerticalLayout createChartsLayout() {
         //initialize charts
-        chartX = new ChartLive("Długość materiału X[mm]", "X");
-        chartTotal = new ChartLive("Długość całkowita [mm]", "Dł. całkowita");
-        chartY = new ChartLive("Długość materiału Y[mm]", "Y");
+        chartX = new ChartLive("Długość materiału X[mm]", "X", "temp");
+        chartTotal = new ChartLive("Długość całkowita [mm]", "Dł. całkowita", "temp");
+        chartY = new ChartLive("Długość materiału Y[mm]", "Y", "temp");
 
-        chartXDelta = new ChartLive("zmiana Delta X[mm]", "ΔX");
-        chartTotalDelta = new ChartLive("Delta całkowita [mm]", "ΔCałkowita");
-        chartYDelta = new ChartLive(" zmiana Delta X[mm]", "ΔX");
+        chartXDelta = new ChartLive("zmiana Delta X[mm]", "ΔX", "Δtemp");
+        chartTotalDelta = new ChartLive("Delta całkowita [mm]", "ΔCałkowita", "Δtemp");
+        chartYDelta = new ChartLive(" zmiana Delta X[mm]", "ΔX", "Δtemp");
 
-        chartTemp = new ChartLive("Temperatura [◦C]", "T");
-        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT");
+        chartTemp = new ChartLive("Temperatura [◦C]", "T", "temp");
+        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]", "ΔT", "Δtemp");
 
         String chartWidth = "500px";
         chartX.setWidth(chartWidth);
@@ -205,14 +204,28 @@ public class SamplingView extends VerticalLayout {
         calculation.recalculateAll();
         //calculation.settActual(paperSlider.getValue());
 
-        chartX.setNextValueDouble(calculation.getX());
-        chartXDelta.setNextValueDouble(calculation.getxDelta());
-        chartY.setNextValueDouble(calculation.getY());
-        chartYDelta.setNextValueDouble(calculation.getyDelta());
-        chartTotal.setNextValueDouble(calculation.getTotal());
-        chartTotalDelta.setNextValueDouble(calculation.getTotalDelta());
-        chartTemp.setNextValueDouble(calculation.getTemp());
-        chartTempDelta.setNextValueDouble(calculation.getTempDelta());
+        chartX.setNextValue1(calculation.getX());
+        chartX.setNextValue2(calculation.getTemp());
+
+        chartXDelta.setNextValue1(calculation.getxDelta());
+        chartXDelta.setNextValue2(calculation.getTempDelta());
+
+        chartY.setNextValue1(calculation.getY());
+        chartY.setNextValue2(calculation.getTemp());
+
+        chartYDelta.setNextValue1(calculation.getyDelta());
+        chartYDelta.setNextValue2(calculation.getTempDelta());
+
+        chartTotal.setNextValue1(calculation.getTotal());
+        chartTotal.setNextValue2(calculation.getTemp());
+
+        chartTotalDelta.setNextValue1(calculation.getTotalDelta());
+        chartTotalDelta.setNextValue2(calculation.getTempDelta());
+
+        chartTemp.setNextValue1(calculation.getTemp());
+        chartTemp.setNextValue2(calculation.getTemp());
+        chartTempDelta.setNextValue1(calculation.getTempDelta());
+        chartTempDelta.setNextValue2(calculation.getTempDelta());
     }
 
     private void setStartEnable(){
