@@ -43,7 +43,7 @@ public class MaterialService {
     public void save(Material material){
         if (material == null) {
             LOGGER.log(Level.SEVERE,
-                    "Material is null. Are you sure you have connected your form to the application?");
+                    "Material jest wartosci null. Upewnij sie ze wszystko wykonales prawidlowo.");
             return;
         }
         materialRepository.save(material);
@@ -53,16 +53,16 @@ public class MaterialService {
     public void populateTestData(){
         if(materialRepository.count() == 0){
             materialRepository.saveAll(
-                    Stream.of("Copper; 0.00017; 770.95; 20.0",
-                            "Brass; 0.00019; 772.45; 20.0",
-                            "Aluminium;0.000231;0;20.0",
-                            "Magnesium;0.00026;0;20.0",
-                            "Gold;0.00014;0;20.0",
-                            "Iron;0.000118;0;20.0",
-                            "Diamond;0.00001;0;20.0",
-                            "Lead;0.00020;0;20.0",
-                            "Platinum;0.00009;0;20.0",
-                            "Steel; 0.00013; 771.00; 20.0")
+                    Stream.of("Miedź; 0.00017; 200; 20.0",
+                            "Mosiądz; 0.00019; 200; 20.0",
+                            "Aluminium;0.000231;200;20.0",
+                            "Magnez;0.00026;200;20.0",
+                            "Złoto;0.00014;200;20.0",
+                            "Żelazo;0.000118;200;20.0",
+                            "Diament;0.00001;200;20.0",
+                            "Ołów;0.00020;200;20.0",
+                            "Platyna;0.00009;200;20.0",
+                            "Stal; 0.00013; 200; 20.0")
                             .map(line->{
                                 String[] split = line.split(";");
                                 Material material = new Material();

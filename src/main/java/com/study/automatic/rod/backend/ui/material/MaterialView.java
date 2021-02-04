@@ -18,7 +18,7 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "", layout = MainLayout.class)
 @CssImport("./styles/material-styles.css")
-@PageTitle("Material | Automatic")
+@PageTitle("Baza materiałów | Automatyka")
 public class MaterialView extends VerticalLayout {
 
     private MaterialService materialService;
@@ -52,7 +52,7 @@ public class MaterialView extends VerticalLayout {
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e->updateList());
 
-        Button addMaterialButton = new Button("Add material");
+        Button addMaterialButton = new Button("Dodaj materiał");
         addMaterialButton.getElement().setProperty("title", "This button allow to add new material to list.");
         addMaterialButton.addClickListener(click->addMaterial());
 
@@ -78,19 +78,19 @@ public class MaterialView extends VerticalLayout {
 
         //Description
         Label nameLabel = new Label("name");
-        nameLabel.getElement().setProperty("title", "name of material");
+        nameLabel.getElement().setProperty("title", "Nazwa materiału");
         grid.getHeaderRows().get(0).getCell(grid.getColumnByKey("name")).setComponent(nameLabel);
 
         Label alphaLabel = new Label("\u03b1[mm/\u2103]");
-        alphaLabel.getElement().setProperty("title", "linear expansion coefficient");
+        alphaLabel.getElement().setProperty("title", "Współczynnik rozszerzalności liniowej");
         grid.getHeaderRows().get(0).getCell(grid.getColumnByKey("alpha")).setComponent(alphaLabel);
 
         Label temp_0Label = new Label("T_0[\u2103]");
-        temp_0Label.getElement().setProperty("title", "temperature during first length measurement");
+        temp_0Label.getElement().setProperty("title", "Temperatura podczas pierwszego pomiaru długości");
         grid.getHeaderRows().get(0).getCell(grid.getColumnByKey("temp_0")).setComponent(temp_0Label);
 
-        Label length_0Label = new Label("l_0[\u2103]");
-        length_0Label.getElement().setProperty("title", "first length measurement with known temperature");
+        Label length_0Label = new Label("l_0[mm]");
+        length_0Label.getElement().setProperty("title", "Pierwsza zmierzona długość");
         grid.getHeaderRows().get(0).getCell(grid.getColumnByKey("length_0")).setComponent(length_0Label);
     }
 

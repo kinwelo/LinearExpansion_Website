@@ -15,14 +15,14 @@ import com.vaadin.flow.server.StreamResource;
 
 import java.io.*;
 //
-@Route(value = "how_to_calculate_alpha", layout = MainLayout.class)
+@Route(value = "karta_projektu", layout = MainLayout.class)
 //@CssImport("./styles/workstation-styles.css")
-@PageTitle("Project info  | Automatic")
+@PageTitle("Karta projektu | Automatyka")
 public class HowToCalculateAlphaView extends Div {
 //tez
     public HowToCalculateAlphaView() {
         setHeight("100%");
-        add(new EmbeddedPdfDocument(new StreamResource("zad1.pdf", () -> {
+        add(new EmbeddedPdfDocument(new StreamResource("kartprojektu.pdf", () -> {
             try {
                 return getPdfInputStream();
             } catch (FileNotFoundException e) {

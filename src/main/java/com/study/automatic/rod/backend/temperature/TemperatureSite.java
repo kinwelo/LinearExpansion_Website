@@ -20,11 +20,11 @@ import java.util.Comparator;
 import java.util.List;
 
 
-@Route(value = "calculate_temperature", layout = MainLayout.class)
+@Route(value = "obliczanie_temperatury", layout = MainLayout.class)
 //@CssImport("./styles/workstation-styles.css")
 //@NpmPackage(value = "jquery", version = "3.4.1")
 //@JavaScript("./src/jquery-test.js")
-@PageTitle("Calculate Temperature \u03b1 | Linear expansion")
+@PageTitle(" Obliczanie temperatury | Automatyka")
 public class TemperatureSite extends VerticalLayout {
 
 
@@ -47,8 +47,8 @@ private VerticalLayout mainBox(MaterialService materialService){
     VerticalLayout midM=new VerticalLayout();
     VerticalLayout middleRight=new VerticalLayout();
 
-    Label area2=new Label("Prosze wybrac material:");
-    Label area3=new Label("Nowa dlugosc [mm]");
+    Label area2=new Label("Proszę wybrać materiał:");
+    Label area3=new Label("Nowa długość [mm]");
     Label area4=new Label("Oblicz Temperature");
     Icon logoV = new Icon(VaadinIcon.QUESTION_CIRCLE_O);
     logoV.getStyle().set("question_circle_o", "pointer");
@@ -56,9 +56,9 @@ private VerticalLayout mainBox(MaterialService materialService){
     VerticalLayout layout=new VerticalLayout();
     Label emptyLabel2 = new Label("");
     emptyLabel2.setHeight("2em");
-    logoV.getElement().setProperty("title", "Startowa dlugosc materialu to 0,2 [m] wiec wybierz docelowa dlugosc. Pamietaj, ze dla im wieksza dlugosc tym wieksza temperatura.");
+    logoV.getElement().setProperty("title", "Startowa długość materiału to 0,2 [m]. Za pomocą interfejsu wybierz docelową długość. Pamietaj, że im wieksza długość, tym większa temperatura będzie potrzebna.");
 
-    Label area1=new Label("To pierwsze glowne zastosowanie projektu. Na tej stronie mozesz sprawdzic jaka temperatura jest wymagana do wydluzenia jednego z dostepnych materialow o poczatkowej dlugosc 200 [mm]. Aby otrzymac potrzebna temperature do wydluzenia prosze wybrac material oraz nowa dlugosc. Temperatura zalezy glownie od wspolczynnika alfa materialu. Startowa temperatura to  20◦C  " );
+    Label area1=new Label("To pierwsze główne zastosowanie projektu. Na tej stronie mozesz sprawdzic jaka temperatura jest wymagana do wydlużenia jednego z dostepnych materialów o poczatkowej dlugosc 200 [mm]. Aby otrzymac temperature potrzebną do wydlużenia proszę wybrać materiał oraz nową długość. Temperatura zalezy glownie od współczynnika alfa materialu. Startowa temperatura to  20◦C  " );
     NumberField numberField = new NumberField();
     numberField.setValue(200d);
     numberField.setHasControls(true);
@@ -70,13 +70,13 @@ private VerticalLayout mainBox(MaterialService materialService){
     materials.sort(Comparator.comparing(Material::getName, String::compareToIgnoreCase));
     chooseMaterial.setItems(materials);
     chooseMaterial.setItemLabelGenerator(Material::getName);
-    TextArea wynik=new TextArea("Temperatura potrzebna do wydluzenia wynosi: ");
+    TextArea wynik=new TextArea("Temperatura potrzebna do wydlużenia wynosi: ");
     wynik.setReadOnly(true);
     wynik.setMinWidth("600px");
 
-    wynik.setValue("Prosze wybrac dowolny material");
+    wynik.setValue("Proszę wybrać dowolny materiał");
 
-    Button click= new Button("zatwierdz zmiany",buttonClickEvent -> {
+    Button click= new Button("zatwierdź zmiany",buttonClickEvent -> {
 ////
         Double Tstart=20.0;//st C
         Double Lstart= 0.200;//m

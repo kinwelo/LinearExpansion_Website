@@ -31,7 +31,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void createHeader() {
-        H1 logo = new H1("Linear expansion");
+        H1 logo = new H1("Automatyka");
         logo.addClassName("logo");
 
         Anchor logout = new Anchor("logout", "Log out");
@@ -56,14 +56,14 @@ public class MainLayout extends AppLayout {
     }
     //nowe
     private void createDrawer() {
-        RouterLink materialLink = new RouterLink("Materials", MaterialView.class);
+        RouterLink materialLink = new RouterLink("Baza Materialow", MaterialView.class);
         RouterLink workstationLink = new RouterLink("Workstation", WorkstationView.class);
-        RouterLink how_to_calculate_alphaLink = new RouterLink("Project info", HowToCalculateAlphaView.class);
+        RouterLink how_to_calculate_alphaLink = new RouterLink("Karta projektu", HowToCalculateAlphaView.class);
         //RouterLink streamingDataExampleViewLink = new RouterLink("StreamingDataExample", StreamingDataExampleView.class);
-        RouterLink samplingLink = new RouterLink("SamplingView", SamplingView.class);
+        RouterLink samplingLink = new RouterLink("Symulacja", SamplingView.class);
         RouterLink samplingLinkM = new RouterLink("SamplingViewMarek", SamplingViewMarek.class);
-        RouterLink calculatetemperatureLink = new RouterLink("Calculate temperature ", TemperatureSite.class);//1 zastosowanie
-        List<RouterLink> links = Arrays.asList(materialLink, workstationLink, how_to_calculate_alphaLink,calculatetemperatureLink, samplingLink,samplingLinkM);
+        RouterLink calculatetemperatureLink = new RouterLink("Obliczanie temperatury ", TemperatureSite.class);//1 zastosowanie
+        List<RouterLink> links = Arrays.asList(materialLink, how_to_calculate_alphaLink,calculatetemperatureLink, samplingLink);
         for (RouterLink link: links){
             link.setHighlightCondition(HighlightConditions.sameLocation());
             addToDrawer(new VerticalLayout(link));

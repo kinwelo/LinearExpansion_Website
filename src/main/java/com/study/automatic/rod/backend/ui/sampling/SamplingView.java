@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Route(value = "test", layout = MainLayout.class)
+@Route(value = "symulacja", layout = MainLayout.class)
 //@CssImport("./styles/workstation-styles.css")
-@PageTitle("Test | Automatic")
+@PageTitle("Symulacja | Automatyka")
 public class SamplingView extends VerticalLayout {
     private final UI ui;
     private Thread thread;
@@ -82,6 +82,8 @@ public class SamplingView extends VerticalLayout {
     public SamplingView(SampleService sampleService, RecordService recordService, MaterialService materialService){
         this.paperSlider = new PaperSlider();
         sliderValueLabel = new Label("Suwak temperatury układu:");
+        Label descriptionLabel=new Label("Witaj w oknie głównym symulacji. Proszę wybrać konfigurację symulacji (Materiały, temperatura i długośc) dla środowiska z poniższej grafiki, aby następnie rozpocząć symulację w jednym z dwóch trybów. W trybie manualnym każda zmiana suwaka spowoduje zakłócenie oraz reakcję układu powodującą utrzymanie długości Z pomiędzy prętami. Drugi tryb w sposób losowy dobiera kolejne temperatury, które analogicznie wpływają na zachowanie symulacji widoczne na wykresach. Jednostki wielkości to odpowiednio stopnie Celsjusza dla temperatur i milimetry dla  wszystkich długości i odległości.");
+
         paperSlider.setMin((int)minTemp);
         paperSlider.setMax((int)maxTemp);
         paperSlider.setValue((int)beginTemp);
@@ -93,22 +95,22 @@ public class SamplingView extends VerticalLayout {
         this.materialService = materialService;
         addClassName("test-view");
         setSizeFull();
-        add(createSimulationControlLayout(), sliderValueLabel, createSlider(), createChartsLayout());
+        add(descriptionLabel,createSimulationControlLayout(), sliderValueLabel, createSlider(), createChartsLayout());
 
     }
 
     private VerticalLayout createChartsLayout() {
         //initialize charts
-        chartX = new ChartLive("x");
-        chartTotal = new ChartLive("totalLength");
-        chartY = new ChartLive("y");
+        chartX = new ChartLive("Dlugosc materialu X[mm]");
+        chartTotal = new ChartLive("Dlugosc calkowita [mm]");
+        chartY = new ChartLive("Dlugosc materialu Y[mm]");
 
-        chartXDelta = new ChartLive("xDelta");
-        chartTotalDelta = new ChartLive("totalDelta");
-        chartYDelta = new ChartLive("yDelta");
+        chartXDelta = new ChartLive("zmiana Delta X[mm]");
+        chartTotalDelta = new ChartLive("Delta calkowita [mm]");
+        chartYDelta = new ChartLive(" zmiana Delta X[mm]");
 
-        chartTemp = new ChartLive("temp");
-        chartTempDelta = new ChartLive("tempDelta");
+        chartTemp = new ChartLive("Temperatura [◦C]");
+        chartTempDelta = new ChartLive("Zmiana temperatur [◦C]");
 
         String chartWidth = "500px";
         chartX.setWidth(chartWidth);
@@ -158,8 +160,8 @@ public class SamplingView extends VerticalLayout {
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
 
-        startButton = new Button("Start simulation");
-        stopButton = new Button("Stop simulation");
+        startButton = new Button("Rozpocznij symulacje");
+        stopButton = new Button("Zakoncz symulacje");
 
         startButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         stopButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -422,7 +424,7 @@ public class SamplingView extends VerticalLayout {
         temperatureMax.setValue(maxTemp);
         temperatureMax.setHasControls(true);
         temperatureMax.setStep(5);
-        temperatureMax.setLabel("Temperature max: ");
+        temperatureMax.setLabel("Temperatura maksymalna: ");
         temperatureMax.addValueChangeListener(numberFieldDoubleComponentValueChangeEvent -> {
             paperSlider.setMax((int) Math.round(temperatureMax.getValue()));
             temperatureBegin.setMax(temperatureMax.getValue());
@@ -432,7 +434,7 @@ public class SamplingView extends VerticalLayout {
         temperatureMin.setValue(minTemp);
         temperatureMin.setHasControls(true);
         temperatureMin.setStep(5);
-        temperatureMin.setLabel("Temperature min: ");
+        temperatureMin.setLabel("Temperatura minimalna: ");
         temperatureMin.addValueChangeListener(numberFieldDoubleComponentValueChangeEvent -> {
             paperSlider.setMin((int) Math.round(temperatureMin.getValue()));
             temperatureBegin.setMin(temperatureMin.getValue());
@@ -447,12 +449,12 @@ public class SamplingView extends VerticalLayout {
         temperatureBegin.setStep(5);
         temperatureBegin.setMax(temperatureMax.getValue());
         temperatureBegin.setMin(temperatureMin.getValue());
-        temperatureBegin.setLabel("Temperature begin: ");
+        temperatureBegin.setLabel("Temperatura poczatkowa: ");
 
         temperatureLayout.add(temperatureBegin, temperatureMax, temperatureMin);
 
-        Button random = new Button("Randomly");
-        Button manual = new Button("Manually");
+        Button random = new Button("Losowo");
+        Button manual = new Button("Manualnie");
         random.setSizeFull();
         manual.setSizeFull();
         manual.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
