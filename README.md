@@ -7,7 +7,9 @@
 - Effect of the first time rendez vouz with Spring framework.
 - Contains small database of materials (CRUD operations included).
 
+### Live charts:
 ![live charts](doc_gif.gif)
+### Simple material database:
 ![database preview](doc_picture.png)
 
 
